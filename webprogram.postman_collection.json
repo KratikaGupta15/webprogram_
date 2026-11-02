@@ -1,0 +1,60 @@
+{
+  "info": {
+    "name": "webprogram - Student CRUD",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "studentId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Create Student",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+        "pm.test('Status is 201', () => pm.response.to.have.status(201));",
+        "pm.collectionVariables.set('studentId', pm.response.json()._id);"
+      ]}}],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"name\": \"Kratika Gupta\",\n  \"email\": \"kratika@example.com\",\n  \"age\": 21,\n  \"course\": \"Web Programming\"\n}" },
+        "url": "{{baseUrl}}/api/students"
+      }
+    },
+    {
+      "name": "Get All Students",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+        "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+        "pm.test('Body is an array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+      ]}}],
+      "request": { "method": "GET", "url": "{{baseUrl}}/api/students" }
+    },
+    {
+      "name": "Get Student By ID",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+        "pm.test('Status is 200', () => pm.response.to.have.status(200));"
+      ]}}],
+      "request": { "method": "GET", "url": "{{baseUrl}}/api/students/{{studentId}}" }
+    },
+    {
+      "name": "Update Student",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+        "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+        "pm.test('Course updated', () => pm.expect(pm.response.json().course).to.eql('Advanced Web Programming'));"
+      ]}}],
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"course\": \"Advanced Web Programming\"\n}" },
+        "url": "{{baseUrl}}/api/students/{{studentId}}"
+      }
+    },
+    {
+      "name": "Delete Student",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+        "pm.test('Status is 200', () => pm.response.to.have.status(200));"
+      ]}}],
+      "request": { "method": "DELETE", "url": "{{baseUrl}}/api/students/{{studentId}}" }
+    }
+  ]
+}
